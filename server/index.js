@@ -117,36 +117,43 @@ app.post('/api/send-email', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
-    const mailOptions = {
-      from: process.env.SMTP_FROM || '"Xalt Analytics" <noreply@xaltanalytics.com>',
-      to,
-      subject: `Your ${leadMagnetTitle} Download`,
-      text: `Hello ${name},\n\nThank you for requesting "${leadMagnetTitle}" from Xalt Analytics.\n\nYou can download your guide here: ${downloadLink}\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nThe Xalt Analytics Team`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2563eb;">Your Download is Ready</h2>
-          <p>Hello ${name},</p>
-          <p>Thank you for requesting <strong>"${leadMagnetTitle}"</strong> from Xalt Analytics.</p>
-          <p>You can download your guide by clicking the button below:</p>
-          <p style="text-align: center; margin: 30px 0;">
-            <a href="${downloadLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">
-              Download Now
-            </a>
-          </p>
-          <p>If you have any questions, please don't hesitate to contact us.</p>
-          <p>Best regards,<br>The Xalt Analytics Team</p>
-        </div>
-      `
-    };
+    try {
+      const mailOptions = {
+        from: process.env.SMTP_FROM,
+        to,
+        subject: `Your ${leadMagnetTitle} Download`,
+        text: `Hello ${name},\n\nThank you for requesting "${leadMagnetTitle}" from Xalt Analytics.\n\nYou can download your guide here: ${downloadLink}\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nThe Xalt Analytics Team`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #2563eb;">Your Download is Ready</h2>
+            <p>Hello ${name},</p>
+            <p>Thank you for requesting <strong>"${leadMagnetTitle}"</strong> from Xalt Analytics.</p>
+            <p>You can download your guide by clicking the button below:</p>
+            <p style="text-align: center; margin: 30px 0;">
+              <a href="${downloadLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                Download Now
+              </a>
+            </p>
+            <p>If you have any questions, please don't hesitate to contact us.</p>
+            <p>Best regards,<br>The Xalt Analytics Team</p>
+          </div>
+        `
+      };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.messageId);
-    
-    return res.json({ 
-      success: true,
-      messageId: info.messageId,
-      previewUrl: nodemailer.getTestMessageUrl(info)
-    });
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent successfully:', info.messageId);
+      
+      return res.json({ 
+        success: true,
+        messageId: info.messageId
+      });
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      return res.status(500).json({ 
+        success: false, 
+        error: 'Failed to send email. Please check SMTP configuration.'
+      });
+    }
     
     // Production code - try SendGrid
     if (process.env.SENDGRID_API_KEY) {
