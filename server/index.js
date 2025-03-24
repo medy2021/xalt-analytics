@@ -27,38 +27,25 @@ app.get('/api/health', (req, res) => {
   return res.json({ status: 'ok', message: 'Server is running!' });
 });
 
-// Configure transporter for testing (ethereal.email)
-let transporter;
-
-async function createTestAccount() {
-  try {
-    // Create a test account at ethereal.email
-    const testAccount = await nodemailer.createTestAccount();
-    
-    // Create a transporter using the test account
-    transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    });
-    
-    console.log('Test email account created:', testAccount.user);
-  } catch (error) {
-    console.error('Failed to create test account:', error);
-    
-    // Fallback to a dummy transporter
-    transporter = {
-      sendMail: async (options) => {
-        console.log('Email would be sent with:', options);
-        return { messageId: 'dummy-id' };
-      }
-    };
+// Configure email transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.ethereal.email',
+  port: parseInt(process.env.SMTP_PORT || '587'),
+  secure: process.env.SMTP_SECURE === 'true',
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
   }
-}
+});
+
+// Verify transporter configuration
+transporter.verify(function (error, success) {
+  if (error) {
+    console.error('SMTP configuration error:', error);
+  } else {
+    console.log('SMTP server is ready to send emails');
+  }
+});
 
 // Create test account on startup
 createTestAccount();
@@ -129,24 +116,37 @@ app.post('/api/send-email', async (req, res) => {
     if (!to || !name || !leadMagnetTitle || !downloadLink) {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
+
+    const mailOptions = {
+      from: process.env.SMTP_FROM || '"Xalt Analytics" <noreply@xaltanalytics.com>',
+      to,
+      subject: `Your ${leadMagnetTitle} Download`,
+      text: `Hello ${name},\n\nThank you for requesting "${leadMagnetTitle}" from Xalt Analytics.\n\nYou can download your guide here: ${downloadLink}\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nThe Xalt Analytics Team`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #2563eb;">Your Download is Ready</h2>
+          <p>Hello ${name},</p>
+          <p>Thank you for requesting <strong>"${leadMagnetTitle}"</strong> from Xalt Analytics.</p>
+          <p>You can download your guide by clicking the button below:</p>
+          <p style="text-align: center; margin: 30px 0;">
+            <a href="${downloadLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">
+              Download Now
+            </a>
+          </p>
+          <p>If you have any questions, please don't hesitate to contact us.</p>
+          <p>Best regards,<br>The Xalt Analytics Team</p>
+        </div>
+      `
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent:', info.messageId);
     
-    // In development mode, just log and return success
-    if (isDevelopment) {
-      console.log('DEV MODE: Would send email with:', {
-        to,
-        subject: `Your ${leadMagnetTitle} Download`,
-        downloadLink
-      });
-      
-      // Simulate a slight delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      return res.json({ 
-        success: true, 
-        provider: 'mock',
-        message: 'Email would be sent in production mode'
-      });
-    }
+    return res.json({ 
+      success: true,
+      messageId: info.messageId,
+      previewUrl: nodemailer.getTestMessageUrl(info)
+    });
     
     // Production code - try SendGrid
     if (process.env.SENDGRID_API_KEY) {
