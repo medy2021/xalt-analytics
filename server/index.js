@@ -140,6 +140,14 @@ app.post('/api/send-email', async (req, res) => {
         `
       };
 
+      console.log('Attempting to send email with config:', {
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: process.env.SMTP_SECURE === 'true',
+        user: process.env.SMTP_USER,
+        from: process.env.SMTP_FROM
+      });
+
       const info = await transporter.sendMail(mailOptions);
       console.log('Email sent successfully:', info.messageId);
       
@@ -148,10 +156,16 @@ app.post('/api/send-email', async (req, res) => {
         messageId: info.messageId
       });
     } catch (error) {
-      console.error('Failed to send email:', error);
+      console.error('SMTP Error Details:', {
+        name: error.name,
+        message: error.message,
+        code: error.code,
+        command: error.command,
+        response: error.response
+      });
       return res.status(500).json({ 
         success: false, 
-        error: 'Failed to send email. Please check SMTP configuration.'
+        error: `SMTP Error: ${error.message}`
       });
     }
     
