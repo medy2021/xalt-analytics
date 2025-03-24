@@ -17,7 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { sendLeadMagnetData } from "@/api/emailApi";
+import { sendLeadMagnetData } from "../api/emailApi";
 
 
 // Add these imports for accessibility
@@ -46,10 +46,13 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: { leadMagnetTitle: stri
         leadMagnetTitle,
         "https://example.com/download"
       );
-
-      navigate(`/thank-you?resource=${encodeURIComponent(leadMagnetTitle)}`, {
-        state: { fromSubmission: true }
-      });
+      
+      toast.success("Form submitted successfully!");
+      form.reset();
+      
+      if (onSuccess) {
+        onSuccess();
+      }
 
       if (onSuccess) {
         onSuccess();
