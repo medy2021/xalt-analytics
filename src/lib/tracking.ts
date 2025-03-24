@@ -104,26 +104,24 @@ const initGTM = (): void => {
 
 // Initialize Facebook Pixel
 const initFBPixel = (): void => {
-  // Dummy Facebook Pixel initialization code
-  if (typeof window !== 'undefined') {
-    (function(f,b,e,v,n,t,s){
-      if(f.fbq)return;
-      n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;
-      n.push=n;
-      n.loaded=!0;
-      n.version='2.0';
-      n.queue=[];
-      t=b.createElement(e);
-      t.async=!0;
-      t.src=v;
-      s=b.getElementsByTagName(e)[0];
-      s.parentNode?.insertBefore(t,s);
-    })(window as any, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    (window as any).fbq('init', trackingConfig.fbPixelId);
-    (window as any).fbq('track', 'PageView');
+  // Only initialize if a valid Pixel ID is provided
+  if (typeof window !== 'undefined' && trackingConfig.fbPixelId) {
+    // Facebook Pixel initialization code
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode?.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    fbq('init', trackingConfig.fbPixelId);
+    fbq('track', 'PageView');
     
     console.log("Facebook Pixel initialized");
+  } else {
+    console.log("Facebook Pixel not initialized (no Pixel ID provided)");
   }
 };
 
@@ -151,3 +149,4 @@ declare global {
     fbq: any;
   }
 }
+

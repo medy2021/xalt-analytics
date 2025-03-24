@@ -17,13 +17,13 @@ export const seoConfig = {
 // Analytics & Tracking Configuration
 export const trackingConfig = {
   // Google Analytics Measurement ID (GA4)
-  gaTrackingId: "G-XXXXXXXXXX", // Replace with your actual GA4 tracking ID
+  gaTrackingId: "G-VV0YPQ0FDL", // Current GA4 tracking ID
   
   // Google Tag Manager ID
-  gtmId: "GTM-XXXXXXX", // Replace with your actual GTM ID
+  gtmId: "GTM-M3GK972K", // Updated GTM ID
   
-  // Facebook Pixel ID
-  fbPixelId: "XXXXXXXXXX", // Replace with your actual Facebook Pixel ID
+  // Facebook Pixel ID - set to empty string if not available
+  fbPixelId: "", // Remove placeholder and set to empty string if not using
   
   // LinkedIn Insight Tag ID
   linkedInTagId: "XXXXXXXX", // Replace with your actual LinkedIn Tag ID
@@ -35,3 +35,5 @@ export const trackingConfig = {
     ctaClick: "cta_click",
   }
 };
+
+

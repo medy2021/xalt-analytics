@@ -3,6 +3,7 @@ import React from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Mail, User, Building } from "lucide-react";
@@ -18,6 +19,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { sendLeadMagnetEmail } from "@/api/emailApi";
+
+// Add these imports for accessibility
+import { DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -39,6 +45,7 @@ interface LeadCaptureFormProps {
 }
 
 const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: LeadCaptureFormProps) => {
+  const navigate = useNavigate();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,7 +55,7 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: LeadCaptureFormProps) =
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     console.log("Form submitted:", data);
     
     // Track conversion event
@@ -63,17 +70,59 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: LeadCaptureFormProps) =
       guide_name: leadMagnetTitle,
     });
     
-    // Here you would typically send this data to your CRM or email marketing platform
-    toast.success("Success!", {
-      description: "Your guide will be sent to your email shortly.",
-      duration: 5000,
-    });
+    // Generate a download link (this would typically be a link to your actual resource)
+    const downloadLink = `https://www.xaltanalytics.com/resources/${encodeURIComponent(leadMagnetTitle.toLowerCase().replace(/\s+/g, '-'))}.pdf`;
     
-    if (onSuccess) {
-      onSuccess();
+    try {
+      // Send email with the download link
+      const result = await sendLeadMagnetEmail(
+        data.email,
+        data.name,
+        leadMagnetTitle,
+        downloadLink
+      );
+      
+      // Show success message
+      toast.success("Success!", {
+        description: "Your guide has been sent to your email.",
+        duration: 5000,
+      });
+      
+      if (onSuccess) {
+        onSuccess();
+      }
+      
+      form.reset();
+      
+      // Redirect to thank you page
+      navigate(`/thank-you?resource=${encodeURIComponent(leadMagnetTitle)}`, {
+        state: { fromSubmission: true }
+      });
+    } catch (error) {
+      console.error("Error sending email:", error);
+      
+      // Even if email fails, we can still redirect the user to the resource
+      toast.error("We couldn't send the email, but you can still access your guide", {
+        description: "Click the button below to download your guide.",
+        action: {
+          label: "Download",
+          onClick: () => window.open(downloadLink, '_blank')
+        },
+        duration: 10000,
+      });
+      
+      // Still consider this a success for the user flow
+      if (onSuccess) {
+        onSuccess();
+      }
+      
+      form.reset();
+      
+      // Redirect to thank you page anyway
+      navigate(`/thank-you?resource=${encodeURIComponent(leadMagnetTitle)}`, {
+        state: { fromSubmission: true, emailFailed: true, downloadLink }
+      });
     }
-    
-    form.reset();
   };
 
   return (
@@ -148,3 +197,10 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: LeadCaptureFormProps) =
 };
 
 export default LeadCaptureForm;
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Download, Check } from "lucide-react";
 import LeadCaptureForm from "./LeadCaptureForm";
@@ -55,11 +55,11 @@ const LeadMagnet = () => {
                       </Button>
                     </SheetTrigger>
                     <SheetContent className="sm:max-w-md">
-                      <div className="px-1">
-                        <h3 className="text-xl font-bold mb-1">Get Your Free Guide</h3>
-                        <p className="text-sm text-muted-foreground mb-6">
-                          Complete the form below to receive our comprehensive guide to unstructured data analytics.
-                        </p>
+                      <SheetTitle>Get Your Free Guide</SheetTitle>
+                      <SheetDescription>
+                        Complete the form below to receive our comprehensive guide to unstructured data analytics.
+                      </SheetDescription>
+                      <div className="px-1 mt-4">
                         <LeadCaptureForm 
                           leadMagnetTitle="The Ultimate Guide to Unstructured Data Analytics" 
                           onSuccess={() => setIsOpen(false)}
@@ -118,3 +118,4 @@ const LeadMagnet = () => {
 };
 
 export default LeadMagnet;
+

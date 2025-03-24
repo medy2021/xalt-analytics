@@ -7,8 +7,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: process.env.GMAIL_USER || 'your-email@gmail.com', // Use environment variable
-    pass: process.env.GMAIL_APP_PASSWORD || 'your-app-password', // Use app password, not regular password
+    user: process.env.VITE_GMAIL_USER || 'your-email@gmail.com', // Use environment variable
+    pass: process.env.VITE_GMAIL_APP_PASSWORD || 'your-app-password', // Use app password, not regular password
   },
 });
 
@@ -84,4 +84,3 @@ export const sendLeadMagnetEmail = async (
   
   return sendEmail(to, subject, text, html);
 };
-
