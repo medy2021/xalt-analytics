@@ -30,3 +30,16 @@ CREATE TRIGGER update_leads_updated_at
     BEFORE UPDATE ON leads
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
+
+-- Enable Row Level Security
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+
+-- Create policy to allow inserts
+CREATE POLICY "Enable insert for leads" ON leads
+    FOR INSERT
+    WITH CHECK (true);
+
+-- Create policy to allow select for leads
+CREATE POLICY "Enable select for leads" ON leads
+    FOR SELECT
+    USING (true);
