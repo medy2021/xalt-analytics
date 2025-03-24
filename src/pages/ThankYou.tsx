@@ -1,69 +1,48 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Download, ArrowLeft } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
 const ThankYou = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const leadMagnetTitle = queryParams.get('resource') || "The Ultimate Guide";
-  
+
   useEffect(() => {
-    // If user directly navigates to this page without coming from form submission
     if (!location.state?.fromSubmission) {
       const timer = setTimeout(() => {
         navigate('/');
-      }, 30000); // Redirect after 30 seconds
-      
+      }, 30000);
       return () => clearTimeout(timer);
     }
   }, [location, navigate]);
 
   return (
-    <div className="min-h-screen">
-      <SEO 
-        title="Thank You"
-        description="Thank you for requesting our resource."
-        canonical="/thank-you"
-      />
-      <Navbar />
-      <main className="container mx-auto px-4 md:px-6 py-20">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="mb-8 mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-            <Download className="h-10 w-10 text-green-600" />
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 text-center">
+        <div className="mb-6 flex justify-center">
+          <CheckCircle className="h-16 w-16 text-green-500" />
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Check Your Email!</h1>
+        <p className="text-gray-600 mb-6">
+          We've sent {leadMagnetTitle} to your inbox. Please check your email to access your download.
+        </p>
+        <div className="space-y-4">
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <p className="text-sm text-blue-700">
+              Don't see the email? Check your spam folder or wait a few minutes for it to arrive.
+            </p>
           </div>
-          
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            Thank You!
-          </h1>
-          
-          <p className="text-xl text-gray-600 mb-8">
-            Your copy of <span className="font-semibold">{leadMagnetTitle}</span> is on its way to your inbox.
-          </p>
-          
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-8 text-left">
-            <h2 className="text-lg font-semibold mb-2">What happens next?</h2>
-            <ol className="list-decimal ml-5 space-y-2">
-              <li>Check your email inbox (and spam folder just in case)</li>
-              <li>Click the download link in the email</li>
-              <li>Save the guide for future reference</li>
-            </ol>
-          </div>
-          
-          <Button 
+          <Button
             onClick={() => navigate('/')}
-            className="group"
+            variant="outline"
+            className="w-full"
           >
-            <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Return to Homepage
           </Button>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 };

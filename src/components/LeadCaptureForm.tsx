@@ -45,6 +45,26 @@ interface LeadCaptureFormProps {
 }
 
 const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: LeadCaptureFormProps) => {
+  const onSubmit = async (data: FormValues) => {
+    try {
+      await sendLeadMagnetEmail(
+        data.email,
+        data.name,
+        leadMagnetTitle,
+        "https://example.com/download"
+      );
+      
+      navigate(`/thank-you?resource=${encodeURIComponent(leadMagnetTitle)}`, {
+        state: { fromSubmission: true }
+      });
+      
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      toast.error("Failed to send email. Please try again.");
+    }
+  };
   const navigate = useNavigate();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
