@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { trackEvent } from "@/lib/tracking";
+import { trackingConfig } from "@/lib/siteConfig";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +47,17 @@ const Navbar = () => {
               About Us
             </a>
            
-            <Button variant="default" size="sm">
+            <Button 
+              variant="default" 
+              size="sm"
+              onClick={() => {
+                trackEvent(trackingConfig.conversionEvents.ctaClick, {
+                  cta_type: "navbar_demo",
+                  page_location: window.location.pathname,
+                });
+                document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Get a Demo
             </Button>
           </nav>
@@ -71,7 +83,19 @@ const Navbar = () => {
               About Us
             </a>
          
-            <Button variant="default" size="sm" className="w-full">
+            <Button 
+              variant="default" 
+              size="sm" 
+              className="w-full"
+              onClick={() => {
+                trackEvent(trackingConfig.conversionEvents.ctaClick, {
+                  cta_type: "mobile_navbar_demo",
+                  page_location: window.location.pathname,
+                });
+                document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+                setIsOpen(false); // Close mobile menu after clicking
+              }}
+            >
               Get a Demo
             </Button>
           </nav>
@@ -82,4 +106,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
 

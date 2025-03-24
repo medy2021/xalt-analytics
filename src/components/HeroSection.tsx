@@ -2,6 +2,8 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { trackEvent } from "@/lib/tracking";
+import { trackingConfig } from "@/lib/siteConfig";
 
 const HeroSection = () => {
   return (
@@ -16,13 +18,33 @@ const HeroSection = () => {
               Xalt Analytics helps you mine and analyze text, image, video, and audio data to improve business decisions and predict future outcomes.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="group">
+              <Button 
+                size="lg" 
+                className="group"
+                onClick={() => {
+                  trackEvent(trackingConfig.conversionEvents.ctaClick, {
+                    cta_type: "hero_consultation",
+                    page_location: window.location.pathname,
+                  });
+                  document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 Get a Free Consultation
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button variant="outline" size="lg">
+              {/* <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => {
+                  trackEvent(trackingConfig.conversionEvents.ctaClick, {
+                    cta_type: "hero_learn_more",
+                    page_location: window.location.pathname,
+                  });
+                  document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 Learn More
-              </Button>
+              </Button> */}
             </div>
           </div>
           <div className="lg:w-1/2 relative">
@@ -44,3 +66,5 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
+

@@ -18,14 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { sendLeadMagnetData } from "../api/emailApi";
-
-
-// Add these imports for accessibility
-import { DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { SheetTitle, SheetDescription } from "@/components/ui/sheet";
-
 import { FormValues, formSchema } from "@/lib/schemas";
-
 
 const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: { leadMagnetTitle: string; onSuccess?: () => void }) => {
   const navigate = useNavigate();
@@ -47,6 +40,11 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: { leadMagnetTitle: stri
         "https://example.com/download"
       );
       
+      // Track the form submission event
+      trackEvent(trackingConfig.conversionEvents.leadCaptureFormSubmit, {
+        lead_magnet: leadMagnetTitle,
+      });
+      
       toast.success("Form submitted successfully!");
       form.reset();
       
@@ -54,9 +52,10 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: { leadMagnetTitle: stri
         onSuccess();
       }
 
-      if (onSuccess) {
-        onSuccess();
-      }
+      // Redirect to thank you page with resource name and submission state
+      navigate(`/thank-you?resource=${encodeURIComponent(leadMagnetTitle)}`, {
+        state: { fromSubmission: true }
+      });
     } catch (error) {
       toast.error("Failed to send email. Please try again.");
     }

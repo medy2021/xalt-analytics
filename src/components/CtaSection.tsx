@@ -11,6 +11,9 @@ const CtaSection = () => {
       cta_type: ctaType,
       page_location: window.location.pathname,
     });
+    
+    // Scroll to contact form
+    document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -33,14 +36,7 @@ const CtaSection = () => {
               Get a Free Consultation
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-white text-white hover:bg-blue-700"
-              onClick={() => handleCtaClick("learn_more")}
-            >
-              Learn More About Our Solutions
-            </Button>
+           
           </div>
         </div>
       </div>
@@ -49,3 +45,4 @@ const CtaSection = () => {
 };
 
 export default CtaSection;
+

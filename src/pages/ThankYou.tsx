@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
+import { trackEvent } from "@/lib/tracking";
+import { trackingConfig } from "@/lib/siteConfig";
 
 const ThankYou = () => {
   const location = useLocation();
@@ -10,13 +12,19 @@ const ThankYou = () => {
   const leadMagnetTitle = queryParams.get('resource') || "The Ultimate Guide";
 
   useEffect(() => {
+    // Track the thank you page view as a conversion
+    trackEvent(trackingConfig.conversionEvents.downloadGuide, {
+      resource: leadMagnetTitle
+    });
+    
+    // Redirect to home if not coming from form submission
     if (!location.state?.fromSubmission) {
       const timer = setTimeout(() => {
         navigate('/');
       }, 30000);
       return () => clearTimeout(timer);
     }
-  }, [location, navigate]);
+  }, [location, navigate, leadMagnetTitle]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -48,3 +56,4 @@ const ThankYou = () => {
 };
 
 export default ThankYou;
+
