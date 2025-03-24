@@ -1,3 +1,11 @@
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
 // Client-side API wrapper for lead magnet functionality
 export const sendLeadMagnetData = async (
   to: string,
@@ -6,29 +14,22 @@ export const sendLeadMagnetData = async (
   downloadLink: string
 ) => {
   try {
-    const response = await fetch('/api/send-lead-magnet', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        to,
-        name,
-        leadMagnetTitle,
-        downloadLink
-      }),
-    });
+    const { data, error } = await supabase
+      .from('leads')
+      .insert([
+        {
+          email: to,
+          name: name,
+          lead_magnet_title: leadMagnetTitle,
+          download_link: downloadLink,
+          created_at: new Date().toISOString()
+        }
+      ]);
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error('Server returned error:', data);
-      throw new Error(data.message || data.error || 'Failed to process lead magnet');
-    }
-
-    return data;
+    if (error) throw error;
+    return { success: true, data };
   } catch (error) {
-    console.error('Error processing lead magnet:', error);
+    console.error('Error storing lead:', error);
     throw error;
   }
 };

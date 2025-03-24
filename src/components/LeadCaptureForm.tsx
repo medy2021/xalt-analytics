@@ -17,7 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { sendLeadMagnetEmail } from "@/api/emailApi";
+import { sendLeadMagnetData } from "@/api/emailApi";
 
 
 // Add these imports for accessibility
@@ -40,7 +40,7 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }: { leadMagnetTitle: stri
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await sendLeadMagnetEmail(
+      await sendLeadMagnetData(
         data.email,
         data.name,
         leadMagnetTitle,
