@@ -15,7 +15,6 @@ import NotFound from "./pages/NotFound";
 import FeatureSection from "./components/FeatureSection";
 import TestimonialCarousel from "./components/TestimonialSection";
 import About from "./pages/About";
-import { Router } from "lucide-react";
 import LeadMagnet from "./components/LeadMagnet";
 
 const queryClient = new QueryClient();
