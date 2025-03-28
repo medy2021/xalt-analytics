@@ -33,12 +33,12 @@ const App = () => (
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
             <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/services" element={<FeatureSection />} />
+            <Route path="/testimonials" element={<TestimonialCarousel />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<LeadMagnet />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
-            <Route path="/services" element= {<FeatureSection />} />
-            <Route path="/testimonials" element= {<TestimonialCarousel />} />
-            <Route path="/about" element= {<About />} />  
-            <Route path="/contact" element = {<LeadMagnet />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

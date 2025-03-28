@@ -124,76 +124,73 @@ import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "./Footer";
 
-
+const features = [
+  {
+    title: "AI & ML Model Creation",
+    description: "AI and machine learning develop systems that learn and adapt to new data.",
+    image: "/images/ai_ml.jpg",
+      benefits: ["AI enables computers to perform human-like tasks such as perception, speech recognition, decision-making, and translation. It includes narrow AI (task-specific) and general AI (human-like intelligence)."]
+  },
+  {
+    title: "Text Data Analysis",
+    description: "Extract insights from emails, social media, documents, and handwritten content with advanced text analysis.",
+    image: "/images/textanalytics.jpg",
+    benefits: ["Handwritten content recognition", "Sentiment analysis of social media", "Information extraction from business documents"]
+  },
+  {
+    title: "Image & Video Analysis", 
+    description: "Turn video and image data into actionable intelligence with our cutting-edge algorithms.",
+    image: "images/img-gen.jpg",
+    benefits: ["Mood and sentiment analysis from images", "Real-time video analysis", "Object and pattern recognition"]
+  },
+  {
+    title: "Audio Data Analysis",
+    description: "Hear what your data is saying with our advanced audio analysis solutions.",
+    image: "images/dash.jpg",
+    benefits: ["Mobile call data analysis", "Call center record analysis", "Improved QA & QC processes"]
+  },
+  {
+    title: "Comprehensive Data Solutions",
+    description: "Integrate all your unstructured data sources for holistic business intelligence.",
+    image: "images/dataAnalyst.jpg",
+    benefits: ["Data mining from various sources", "Improved business decision-making", "Predictive analytics and insights"]
+  },
+  {
+    title: "Big Data Analytics",
+    description: "Big data analytics extracts insights from large datasets.",
+    image: "images/bigData.jpg",
+    benefits: [
+      "Big data analytics extracts valuable insights using advanced technologies.",
+      "Hadoop enables distributed processing of large datasets."
+    ]
+    
+  },
+  {
+    title: "Software Development",
+    description: "Software development involves coding and testing applications.",
+    image: "images/imgB.jpg",
+    benefits: [
+      "Software development enables automation, efficiency, and user engagement.",
+      "Agile and DevOps ensure continuous improvement.",
+      "JavaScript, Python, and Java are widely used."
+    ]
+  },
+  
+  {
+    title: "LLM",
+    description: "LLMs generate human-like text using AI.",
+    image: "images/llm4.png",
+    benefits: [
+      "LLMs use vast data and neural networks for accurate language processing.",
+      "They power chatbots, content generation, and translation.",
+      "Popular models include GPT, BERT, and T5."
+    ]    
+  }
+  
+];
 
 const FeatureCard = ({ feature }) => {
   const [isHovered, setIsHovered] = useState(false);
-
-
-  const features = [
-    {
-      title: "AI & ML Model Creation",
-      description: "AI and machine learning develop systems that learn and adapt to new data.",
-      image: "/images/ai_ml.jpg",
-        benefits: ["AI enables computers to perform human-like tasks such as perception, speech recognition, decision-making, and translation. It includes narrow AI (task-specific) and general AI (human-like intelligence)."]
-    },
-    {
-      title: "Text Data Analysis",
-      description: "Extract insights from emails, social media, documents, and handwritten content with advanced text analysis.",
-      image: "/images/textanalytics.jpg",
-      benefits: ["Handwritten content recognition", "Sentiment analysis of social media", "Information extraction from business documents"]
-    },
-    {
-      title: "Image & Video Analysis", 
-      description: "Turn video and image data into actionable intelligence with our cutting-edge algorithms.",
-      image: "images/img-gen.jpg",
-      benefits: ["Mood and sentiment analysis from images", "Real-time video analysis", "Object and pattern recognition"]
-    },
-    {
-      title: "Audio Data Analysis",
-      description: "Hear what your data is saying with our advanced audio analysis solutions.",
-      image: "images/dash.jpg",
-      benefits: ["Mobile call data analysis", "Call center record analysis", "Improved QA & QC processes"]
-    },
-    {
-      title: "Comprehensive Data Solutions",
-      description: "Integrate all your unstructured data sources for holistic business intelligence.",
-      image: "images/dataAnalyst.jpg",
-      benefits: ["Data mining from various sources", "Improved business decision-making", "Predictive analytics and insights"]
-    },
-    {
-      title: "Big Data Analytics",
-      description: "Big data analytics extracts insights from large datasets.",
-      image: "images/bigData.jpg",
-      benefits: [
-        "Big data analytics extracts valuable insights using advanced technologies.",
-        "Hadoop enables distributed processing of large datasets."
-      ]
-      
-    },
-    {
-      title: "Software Development",
-      description: "Software development involves coding and testing applications.",
-      image: "images/imgB.jpg",
-      benefits: [
-        "Software development enables automation, efficiency, and user engagement.",
-        "Agile and DevOps ensure continuous improvement.",
-        "JavaScript, Python, and Java are widely used."
-      ]
-    },
-    
-    {
-      title: "LLM",
-      description: "LLMs generate human-like text using AI.",
-      image: "images/llm4.png",
-      benefits: [
-        "LLMs use vast data and neural networks for accurate language processing.",
-        "They power chatbots, content generation, and translation.",
-        "Popular models include GPT, BERT, and T5."
-      ]    
-    }
-    
-  ];
 
   return (
 
