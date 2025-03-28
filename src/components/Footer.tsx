@@ -30,20 +30,20 @@ const Footer = () => {
           <div>
             <h4 className="text-white font-semibold mb-4">Solutions</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white transition-colors">Text Analytics</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Image Analytics</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Video Analytics</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Audio Analytics</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Custom Solutions</a></li>
+              <li><a href="/services" className="hover:text-white transition-colors">Text Analytics</a></li>
+              <li><a href="/services" className="hover:text-white transition-colors">Image Analytics</a></li>
+              <li><a href="/services" className="hover:text-white transition-colors">Video Analytics</a></li>
+              <li><a href="/services" className="hover:text-white transition-colors">Audio Analytics</a></li>
+              <li><a href="/services" className="hover:text-white transition-colors">Custom Solutions</a></li>
             </ul>
           </div>
           
           <div>
             <h4 className="text-white font-semibold mb-4">Company</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
+              {/* <li><a href="#" className="hover:text-white transition-colors">Careers</a></li> */}
+              <li><a href="/contact" className="hover:text-white transition-colors">Contact</a></li>
             </ul>
           </div>
           
@@ -53,15 +53,15 @@ const Footer = () => {
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 mt-0.5 text-blue-400" />
                
-                <span>402 A Prakrati Corporate Building, YN Road, Near Malwa Mill, Indore MP 452001</span>
+                <span>Mahakosh House, 7/5 Shree Ram Nagar, South Tukoganj, Indore, Madhya Pradesh - 452001</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-blue-400" />
-                <span> +91-9302594888</span>
+                <span> +91-7225020264</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-blue-400" />
-                <span>info@xaltanalytics.com</span>
+                <span>sales@xaltanalytics.com</span>
               </li>
             </ul>
           </div>

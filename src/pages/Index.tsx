@@ -8,6 +8,8 @@ import LeadMagnet from "@/components/LeadMagnet";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import DataMonetizationFeatures from "@/components/FeatureSection2";
+import Client from "@/components/Client";
 
 const Index = () => {
   return (
@@ -20,9 +22,11 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
-        <FeatureSection />
+        <DataMonetizationFeatures />
+        {/* <FeatureSection />
         <TestimonialSection />
-        <LeadMagnet />
+        <LeadMagnet /> */}
+        <Client />
         <CtaSection />
       </main>
       <Footer />

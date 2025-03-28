@@ -1,84 +1,94 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const { createClient } = require('@supabase/supabase-js');
+// const express = require("express");
+// const mongoose = require("mongoose");
+// const cors = require("cors");
+// const nodemailer = require("nodemailer");
 
-// Load environment variables
-dotenv.config();
+// const app = express();
+
+
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import nodemailer from "nodemailer";
 
 const app = express();
-const PORT = process.env.PORT || 8080;
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const PORT =  3001;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// For debugging
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  console.log('Request body:', req.body);
-  next();
+// Connect to MongoDB
+mongoose
+  .connect("mongodb+srv://Xalt-test:nsFEW4w6OzddKead@test.yux69jn.mongodb.net/", { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error("MongoDB Connection Error:", err));
+
+// Define Mongoose Schema & Model
+const FormSubmissionSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  organization: { type: String  },
+  details: { type: String},
+  submittedAt: { type: Date, default: Date.now }
 });
 
-// Add a simple health check endpoint
-app.get('/api/health', (req, res) => {
-  return res.json({ status: 'ok', message: 'Server is running!' });
-});
+const FormSubmission = mongoose.model("FormSubmission", FormSubmissionSchema);
 
-// Lead magnet delivery endpoint using Supabase
-app.post('/api/send-lead-magnet', async (req, res) => {
-  try {
-    const { to, name, leadMagnetTitle, downloadLink } = req.body;
+// Configure Nodemailer
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: 'abhimanyu.mishra@xaltanalytics.com', // Your Gmail address
+//     pass: 'Xalt@123' 
+//   }
+// });
 
-    console.log('Lead magnet request received:', { to, name, leadMagnetTitle });
-
-    if (!to || !name || !leadMagnetTitle || !downloadLink) {
-      return res.status(400).json({ success: false, message: 'Missing required fields' });
-    }
-
-    // Store lead information in Supabase
-    const { data, error } = await supabase
-      .from('leads')
-      .insert([
-        { 
-          email: to,
-          name: name,
-          lead_magnet_title: leadMagnetTitle,
-          download_link: downloadLink,
-          created_at: new Date().toISOString()
-        }
-      ]);
-
-    if (error) {
-      console.error('Error storing lead:', error);
-      return res.status(500).json({ 
-        success: false, 
-        error: 'Failed to store lead information'
-      });
-    }
-
-    return res.json({ 
-      success: true,
-      message: 'Lead magnet delivery processed successfully'
-    });
-
-  } catch (error) {
-    console.error('Error in lead magnet endpoint:', error);
-    return res.status(500).json({ 
-      success: false, 
-      error: error.message || 'Unknown server error'
-    });
+const transporter = nodemailer.createTransport({
+  host: "smtp.office365.com", // ✅ Use Outlook's SMTP server
+  port: 587, // ✅ Use 587 for TLS (recommended)
+  secure: false, // ✅ `false` for TLS
+  auth: {
+    user: 'abhimanyu.mishra@xaltanalytics.com', // ✅ Your Outlook email
+    pass: 'Xalt@123' // ✅ Your Outlook password (or App Password)
+  },
+  tls: {
+    ciphers: "SSLv3", // ✅ Ensures a secure connection
   }
 });
 
+// API Route to Handle Form Submission
+app.post("/submit", async (req, res) => {
+  const { name, email, organization, details } = req.body;
 
-// Start the server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+  if (!name || !email || !organization || !details) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+    // Save data to MongoDB
+    const newSubmission = new FormSubmission({ name, email, organization, details });
+    await newSubmission.save();
+
+    // Send confirmation email to the user
+    const mailOptions = {
+      from: "abhimanyu.mishra@xaltanalytics.com",
+      to: email,
+      organization: `Re: ${organization}`,
+      text: `Hello ${name},\n\nThank you for reaching out!\n\nWe have received your details:\n"${details}"\n\nOur team will get back to you shortly.\n\nBest regards,\nXalt Analytics`
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ details: "Form submitted successfully and email sent." });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
+});
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

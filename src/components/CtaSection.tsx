@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { trackEvent } from "@/lib/tracking";
 import { trackingConfig } from "@/lib/siteConfig";
+import { useNavigate } from "react-router-dom";
 
 const CtaSection = () => {
   const handleCtaClick = (ctaType: string) => {
@@ -11,11 +12,13 @@ const CtaSection = () => {
       cta_type: ctaType,
       page_location: window.location.pathname,
     });
+    navigate("/contact")
     
     // Scroll to contact form
     document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const navigate = useNavigate()
   return (
     <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
       <div className="container mx-auto px-4 md:px-6">
@@ -31,7 +34,9 @@ const CtaSection = () => {
               size="lg" 
               variant="secondary" 
               className="bg-white text-blue-700 hover:bg-blue-50 group"
-              onClick={() => handleCtaClick("consultation")}
+              onClick={() => handleCtaClick("consultation")
+
+              }
             >
               Get a Free Consultation
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

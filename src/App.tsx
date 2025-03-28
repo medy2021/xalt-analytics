@@ -12,6 +12,11 @@ import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
+import FeatureSection from "./components/FeatureSection";
+import TestimonialCarousel from "./components/TestimonialSection";
+import About from "./pages/About";
+import { Router } from "lucide-react";
+import LeadMagnet from "./components/LeadMagnet";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +36,10 @@ const App = () => (
             <Route path="/thank-you" element={<ThankYou />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
+            <Route path="/services" element= {<FeatureSection />} />
+            <Route path="/testimonials" element= {<TestimonialCarousel />} />
+            <Route path="/about" element= {<About />} />  
+            <Route path="/contact" element = {<LeadMagnet />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

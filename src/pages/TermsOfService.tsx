@@ -6,15 +6,17 @@ import Footer from "@/components/Footer";
 const TermsOfService = () => {
   return (
     <div className="min-h-screen">
+        <div className="bg-[#111827] h-[63px]"></div>
+
       <Navbar />
       <main className="container mx-auto px-4 md:px-6 py-12">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold mb-8">Terms of Service</h1>
           
           <div className="prose prose-lg max-w-none">
-            <p className="text-lg text-gray-600 mb-6">
+            {/* <p className="text-lg text-gray-600 mb-6">
               Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-            </p>
+            </p> */}
             
             <h2 className="text-2xl font-semibold mt-8 mb-4">1. Agreement to Terms</h2>
             <p>
@@ -71,9 +73,9 @@ const TermsOfService = () => {
               If you have any questions about these Terms of Service, please contact us:
             </p>
             <ul className="list-disc ml-6 mb-4 space-y-2">
-              <li>By email: info@xaltanalytics.com</li>
-              <li>By phone: (555) 123-4567</li>
-              <li>By mail: 123 Analytics Ave, Data City, DC 10101</li>
+            <li>By email: sales@xaltanalytics.com</li>
+              <li>By phone: +91-7225020264</li>
+              <li>By Address: Mahakosh House, 7/5 Shree Ram Nagar, South Tukoganj, Indore, Madhya Pradesh - 452001</li>
             </ul>
           </div>
         </div>

@@ -1,14 +1,14 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { trackEvent } from "@/lib/tracking";
 import { trackingConfig } from "@/lib/siteConfig";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -24,29 +24,31 @@ const Navbar = () => {
         scrolled ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="container mx-auto my-0 px-4 md:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <a href="#" className="flex items-center">
+            <a href="/" className="flex items-center">
               <img 
-                src="/images/xalt-logo.png" 
+                src={scrolled ? "/images/xalt-logo.png" : "/images/logo-white.png"} // Change logo based on scroll
                 alt="Xalt Analytics Logo" 
                 className="h-8 mr-2" 
               />
-              {/* <span className="text-xl font-bold text-primary">Xalt Analytics</span> */}
             </a>
           </div>
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="#features" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
-              Solutions
+            <a href="/" className={`text-sm font-medium ${scrolled ? "text-gray-700" : "text-white"} hover:text-primary transition-colors`}>
+              Home
             </a>
-            <a href="#testimonials" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
+
+            <a href="/services" className={`text-sm font-medium ${scrolled ? "text-gray-700" : "text-white"} hover:text-primary transition-colors`}>
+              Services
+            </a>
+            {/* <a href="/testimonials" className={`text-sm font-medium ${scrolled ? "text-gray-700" : "text-white"} hover:text-primary transition-colors`}>
               Testimonials
-            </a>
-            <a href="#" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
+            </a> */}
+            <a href="/about" className={`text-sm font-medium ${scrolled ? "text-gray-700" : "text-white"} hover:text-primary transition-colors`}>
               About Us
             </a>
-           
             <Button 
               variant="default" 
               size="sm"
@@ -56,9 +58,10 @@ const Navbar = () => {
                   page_location: window.location.pathname,
                 });
                 document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+                navigate("/contact");
               }}
             >
-              Get a Demo
+              Contact Us
             </Button>
           </nav>
           <div className="md:hidden">
@@ -73,16 +76,15 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white p-4 shadow-lg">
           <nav className="flex flex-col space-y-4">
-            <a href="#features" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
-              Solutions
+            <a href="/" className={`text-sm font-medium ${scrolled ? "text-gray-700" : "text-white"} hover:text-primary transition-colors`}>
+              Home
             </a>
-            <a href="#testimonials" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
-              Testimonials
+            <a href="/services" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
+              Services
             </a>
-            <a href="#" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
+            <a href="/about" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
               About Us
             </a>
-         
             <Button 
               variant="default" 
               size="sm" 
@@ -96,7 +98,7 @@ const Navbar = () => {
                 setIsOpen(false); // Close mobile menu after clicking
               }}
             >
-              Get a Demo
+              Contact US
             </Button>
           </nav>
         </div>
@@ -106,6 +108,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
