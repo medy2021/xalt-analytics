@@ -126,6 +126,7 @@
 
 
 
+
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -157,20 +158,9 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }) => {
   // Load the HubSpot Forms script
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = 'https://js.hsforms.net/forms/v2.js';
+    script.src = '//js.hsforms.net/forms/embed/v2.js';
     script.async = true;
-    // script.defer = true;
-    // document.body.appendChild(script);
-
-    script.onload = () => {
-      if (window.hbspt) {
-        window.hbspt.forms.create({
-          region: "na1", // Change region if necessary, depending on where your HubSpot account is located
-          portalId: "242448665", // Replace with your HubSpot portal ID
-          formId: "d7702fb0-b52b-4df3-864f-7f7a6ec6e74b", // Replace with your HubSpot form ID
-        });
-      }
-    };
+    script.defer = true;
     document.body.appendChild(script);
 
     return () => {
