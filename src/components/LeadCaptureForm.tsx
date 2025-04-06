@@ -315,7 +315,7 @@
 
 
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -343,95 +343,26 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }) => {
     }
   });
 
-  // Load the HubSpot Forms script
-  useEffect(() => {
-    const script = document.createElement('script');
-      script.src = 'https://js.hsforms.net/forms/embed/v2.js';
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      // Prepare the data for HubSpot
-const hubspotData = {
-  fields: [
-    {
-      name: "firstname",
-      value: data.name
-    },
-    {
-      name: "email",
-      value: data.email
-    },
-    {
-      name: "organization",
-      value: data.organization || ""
-    },
-    {
-      name: "message",
-      value: data.details || "No message provided"
-    }
-  ],
-  context: {
-    pageUri: window.location.href,
-    pageName: leadMagnetTitle || document.title
-  }
-};
+      const response = await fetch("https://formspree.io/f/myzebkpv", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-   console.log("HubSpot submission data:", JSON.stringify(hubspotData, null, 2));
-      // Submit to HubSpot API
-      const response = await fetch(
-       "https://api.hsforms.com/submissions/v3/integration/submit/242448665/d7702fb0-b52b-4df3-864f-7f7a6ec6e74b",
-     {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(hubspotData)
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-  const responseData = await response.json();
-console.log('HubSpot response:', responseData);
-if (responseData.status === "error") {
-  console.error("Submission error from HubSpot:", responseData.message);
-}
-
-      
-      // Alternative implementation using HubSpot's JS API
-      // if window.hbspt is available after script loads
-      /* 
-      if (window.hbspt) {
-        window.hbspt.forms.submit({
-          portalId: "242448665",
-          formId: "d7702fb0-b52b-4df3-864f-7f7a6ec6e74b",
-          formInstanceId: "submission-instance",
-          formData: hubspotData.fields,
-          onFormSubmit: function() {
-            console.log("Form submitted via hbspt");
-          }
-        });
-      }
-      */
-
-      navigate("/thank-you");
-      
-      if (onSuccess && typeof onSuccess === 'function') {
-        onSuccess();
+      if (response.ok) {
+        if (onSuccess) onSuccess();
+        navigate("/thank-you");
+      } else {
+        console.error("Form submission failed");
       }
     } catch (error) {
-      console.error("HubSpot submission error", error);
+      console.error("Submission error", error);
     } finally {
       setLoading(false);
     }
@@ -444,11 +375,13 @@ if (responseData.status === "error") {
           <Loader />
         </div>
       )}
-
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4 bg-white shadow-lg rounded-lg">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 p-4 bg-white shadow-lg rounded-lg"
+      >
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-          <input 
+          <input
             {...form.register("name")}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
             placeholder="Your Full Name"
@@ -457,10 +390,9 @@ if (responseData.status === "error") {
             <p className="text-red-500 text-sm mt-1">{form.formState.errors.name.message}</p>
           )}
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Work Email</label>
-          <input 
+          <input
             type="email"
             {...form.register("email")}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
@@ -470,28 +402,25 @@ if (responseData.status === "error") {
             <p className="text-red-500 text-sm mt-1">{form.formState.errors.email.message}</p>
           )}
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Organization</label>
-          <input 
+          <input
             {...form.register("organization")}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
             placeholder="Your Company or Organization"
           />
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-          <textarea 
+          <textarea
             {...form.register("details")}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
             placeholder="Share a brief overview of your data challenges"
             rows={4}
           />
         </div>
-
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all font-semibold"
           disabled={loading}
         >
