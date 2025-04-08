@@ -79,9 +79,23 @@ const ThankYou = () => {
     if (typeof window.gtag === 'function') {
 
       window.gtag('event', 'conversion', {
-        send_to: 'AW-16884246284/-W73CNuV37UaEIzOhPM-',
+        send_to: 'AW-16884246284/-W73CNuV37UaEIzOhPM-',   
         value: 1.0,
         currency: 'MXN',
+      });
+    }
+  }, []);
+
+
+  // <!-- Event snippet for Form Submission - ThankYou - Youtube conversion page -->
+  
+  useEffect(() => {
+    if (typeof window.gtag === 'function') {
+
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-16884246284/291bCISr07UaEIzOhPM-',
+      value: 1.0,
+      currency: 'MXN'
       });
     }
   }, []);
@@ -103,7 +117,6 @@ const ThankYou = () => {
       const color = colors[Math.floor(Math.random() * colors.length)];
 
       const left = Math.random() * 100;
-
       const delay = Math.random() * 5;
 
       const duration = Math.random() * 3 + 2;
