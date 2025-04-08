@@ -62,10 +62,31 @@
 import React, { useState, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+
+// 👇 Add this block to fix TypeScript/Vite complaining about window.gtag
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
  
 const ThankYou = () => {
 
   const [particles, setParticles] = useState([]);
+
+  // <!-- Event snippet for Form Submission Thank-You  Page conversion page -->
+  useEffect(() => {
+    if (typeof window.gtag === 'function') {
+
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-16884246284/-W73CNuV37UaEIzOhPM-',
+        value: 1.0,
+        currency: 'MXN',
+      });
+    }
+  }, []);
+
+
 
   const navigate = useNavigate();
  
