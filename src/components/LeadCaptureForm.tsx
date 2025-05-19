@@ -340,6 +340,7 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }) => {
       email: "",
       organization: "",
       details: ""
+      
     }
   });
 
