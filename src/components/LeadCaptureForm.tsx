@@ -346,7 +346,7 @@ const LeadCaptureForm = ({ leadMagnetTitle, onSuccess }) => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await fetch("https://formspree.io/f/myzebkpv", {
+      const response = await fetch("https://xalt-web-be-1.onrender.com/submit", {
         method: "POST",
         headers: {
           Accept: "application/json",
